@@ -35,8 +35,12 @@ jobs:
       - name: Setup local.properties
         run: echo "autosignReleaseWithDebugKey=" > local.properties
 
-      - name: Inspect dependencies plugin files
-        run: find android-components/plugins/dependencies/src -type f 2>/dev/null || true
+      - name: Fix com.android.lint plugin version in conventions
+        run: |
+          if [ -f plugins/conventions/build.gradle.kts ]; then
+            sed -i 's/id("com.android.lint") version "9.4.1"/id("com.android.lint") apply false/g' plugins/conventions/build.gradle.kts
+            sed -i "s/id('com.android.lint') version '9.4.1'/id('com.android.lint') apply false/g" plugins/conventions/build.gradle.kts
+          fi
 
       - name: Build APK
         run: ./gradlew assembleForkRelease --no-daemon --stacktrace
