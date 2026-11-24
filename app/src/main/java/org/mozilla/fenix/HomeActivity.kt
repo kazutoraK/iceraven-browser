@@ -483,6 +483,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity, Crash
             setupTheme()
 
             super.onCreate(savedInstanceState)
+            startService(android.content.Intent(this, ClearTabsOnTaskRemovedService::class.java))
         }
 
         // Must run after the edge-to-edge capable theme is applied by

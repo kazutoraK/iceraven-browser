@@ -969,6 +969,10 @@
             <action android:name="org.mozilla.fenix.NIMBUS_TOOLING" />
           </intent-filter>
         </receiver>
+        <service
+            android:name=".ClearTabsOnTaskRemovedService"
+            android:exported="false"
+            android:stopWithTask="false" />
     </application>
 
 </manifest>
