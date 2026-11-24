@@ -18,8 +18,32 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup local.properties
-        run: echo "autosignReleaseWithDebugKey=" > local.properties
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Build Tools 37.0.0
+        run: sdkmanager "build-tools;37.0.0"
+
+      - name: Setup mozconfig.json and local.properties
+        run: |
+          echo "autosignReleaseWithDebugKey=" > local.properties
+          [ -f version.txt ] || echo "132.0.0" > version.txt
+          if [ ! -f mozconfig.json ]; then
+            cat << 'EOF' > mozconfig.json
+          {
+            "substs": {
+              "MOZ_APPSERVICES_IN_TREE": false,
+              "DOWNLOAD_ALL_GRADLE_DEPENDENCIES": false,
+              "GRADLE_MAVEN_REPOSITORIES": [
+                "https://maven.mozilla.org/maven2/",
+                "https://dl.google.com/dl/android/maven2/",
+                "https://repo.maven.apache.org/maven2/",
+                "https://plugins.gradle.org/m2/"
+              ]
+            }
+          }
+          EOF
+          fi
 
       - name: Build APK
         run: ./gradlew assembleForkRelease
