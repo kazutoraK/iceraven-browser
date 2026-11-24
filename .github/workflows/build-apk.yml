@@ -36,15 +36,7 @@ jobs:
         run: echo "autosignReleaseWithDebugKey=" > local.properties
 
       - name: Build APK
-        run: ./gradlew assembleForkRelease --stacktrace --continue || true
-
-      - name: Inspect catalog files and build problems
-        run: |
-          echo "=== Arquivos versions.toml no repo ==="
-          find . -maxdepth 4 -name "*versions.toml" 2>/dev/null || true
-          echo "=== Conteudo do plugin dependencies ==="
-          ls -la android-components/plugins/dependencies/src/main/kotlin 2>/dev/null || ls -la android-components/plugins/dependencies 2>/dev/null || true
-          ./gradlew assembleForkRelease --stacktrace
+        run: ./gradlew assembleForkRelease --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
