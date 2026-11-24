@@ -32,31 +32,11 @@ jobs:
           yes | "$SDKMANAGER" --sdk_root=/usr/local/lib/android/sdk --licenses >/dev/null || true
           "$SDKMANAGER" --sdk_root=/usr/local/lib/android/sdk "build-tools;37.0.0" "platforms;android-35"
 
-      - name: Setup mozconfig.json and local.properties
-        run: |
-          echo "autosignReleaseWithDebugKey=" > local.properties
-          [ -f version.txt ] || echo "132.0.0" > version.txt
-          if [ ! -f mozconfig.json ]; then
-            cat << 'EOF' > mozconfig.json
-          {
-            "substs": {
-              "MOZ_APPSERVICES_IN_TREE": false,
-              "DOWNLOAD_ALL_GRADLE_DEPENDENCIES": false,
-              "GRADLE_MAVEN_REPOSITORIES": [
-                "https://maven.mozilla.org/maven2/",
-                "https://dl.google.com/dl/android/maven2/",
-                "https://repo.maven.apache.org/maven2/",
-                "https://plugins.gradle.org/m2/"
-              ]
-            }
-          }
-          EOF
-          fi
-          echo "=== Conteudo da pasta android-components ==="
-          ls -la android-components/plugins/dependencies || echo "PASTA NAO ENCONTRADA"
+      - name: Setup local.properties
+        run: echo "autosignReleaseWithDebugKey=" > local.properties
 
       - name: Build APK
-        run: ./gradlew assembleForkRelease --stacktrace
+        run: ./gradlew assembleForkRelease --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
