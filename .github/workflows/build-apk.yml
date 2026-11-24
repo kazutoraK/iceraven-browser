@@ -36,7 +36,7 @@ jobs:
         run: echo "autosignReleaseWithDebugKey=" > local.properties
 
       - name: Build APK
-        run: ./gradlew assembleForkRelease --info
+        run: ./gradlew assembleForkRelease --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
