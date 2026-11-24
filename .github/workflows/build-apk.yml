@@ -35,6 +35,9 @@ jobs:
       - name: Setup local.properties
         run: echo "autosignReleaseWithDebugKey=" > local.properties
 
+      - name: Inspect dependencies plugin files
+        run: find android-components/plugins/dependencies/src -type f 2>/dev/null || true
+
       - name: Build APK
         run: ./gradlew assembleForkRelease --no-daemon --stacktrace
 
@@ -42,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: iceraven-apk
-          path: app/build/outputs/apk/forkRelease/*.apk
+          path: app/build/outputs/apk/forkRelease/*.apkg
